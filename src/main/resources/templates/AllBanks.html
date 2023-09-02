@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Title</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+</head>
+<body>
+<div class="container">
+  <h2 th:if="${BankList.size()==0}">Банков нет</h2>
+  <h2 th:unless="${BankList.size()==0}">Таблица всех банков</h2>
+  <p >По ссылкам можно работать с клиентами</p>
+  <form action="/" th:unless="${BankList.size()==0}">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Поиск" name="search">
+      <div class="input-group-btn">
+        <button class="btn btn-primary"  type="submit"><i class="glyphicon glyphicon-search"></i></button>
+      </div>
+    </div>
+  </form>
+  <table th:unless="${BankList.size()==0}" class="table table-striped">
+    <thead>
+    <tr>
+      <th>Название</th>
+      <th>Дата основания</th>
+      <th>Количесвто клиентов</th>
+      <th>Редактирование</th>
+      <th>Удаление</th>
+      <th>Работа с клиентами</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bank : ${BankList}">
+      <th th:text="${bank.title}"></th>
+      <th th:text="${bank.date}"></th>
+      <th th:text="${bank.amountOfClients}"></th>
+      <th>
+        <a th:href="@{'/bank/edit/' + ${bank.id}}" class="btn btn-primary">Редактировать</a>
+      </th>
+      <th>
+        <form th:action="@{'/bank/delete/'+${bank.id}}" method="post">
+          <input type="submit" class="btn btn-danger" value="Удалить">
+        </form>
+      </th>
+      <th><a th:href="@{'/allUsers/'+${bank.id}}" class="btn btn-success">Клиенты</a></th>
+    </tr>
+    </tbody>
+  </table>
+  <input type="button" class="btn btn-primary" value="Добавить"
+         onclick="window.location.href='/bank/create'">
+  <br><br>
+  <form action="/" method="get" th:unless="${BankList.size()==0}">
+  <select class="btn btn-default" name="sort" >
+    <option selected>Сортировать по </option>
+    <option value="title">Название</option>
+    <option value="NumOfClients">Кол-во клиентов</option>
+    <option value="date">Дата основания</option>
+  </select>
+    <input type="submit" value="Ок"  class="btn btn-success">
+  </form>
+  </div>
+</body>
+</html>

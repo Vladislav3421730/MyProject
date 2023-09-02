@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Project</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<br><br>
+<form th:object="${bank}" action="/bank/save" class="form-container" method="post">
+    <input type="hidden" th:field="*{id}">
+    <div class="form-group">
+        <label for="bnk">Банк: </label>
+        <input type="text" class="form-control" id="bnk" th:field="*{title}" placeholder="Название банка">
+    </div>
+    <div class="form-group">
+        <label for="dat"> Дата основания: </label>
+        <input type="date" class="form-control" min="1980-01-01" max="2023-12-31" id="dat" th:field="*{date}">
+    </div>
+    <div class="form-group">
+        <label for="kol"> Клиенты: </label>
+        <input type="number" class="form-control"  id="kol" th:field="*{amountOfClients}" placeholder="Количество клиентов">
+    </div>
+    <input type="submit" class="btn btn-primary right" th:value="${bank.id == null ? 'Сохранить' : 'Редактировать'}"/>
+</form>
+<br>
+<input type="button" class="btn btn-primary right" value="Просмотр банков"
+       onclick="window.location.href='/bank/output'">
+
+</body>
+</html>

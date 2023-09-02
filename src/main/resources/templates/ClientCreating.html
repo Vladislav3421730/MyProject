@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+<br>
+<h2><p th:text="'Клиенты банка:'+${bank.title}"/></h2>
+<form th:action="@{'/clients/create/'+${bank.id}}" class="form-container" method="post">
+    <input type="hidden" th:field="*{user.id}">
+    <div class="form-group">
+        <label for="nam">Имя: </label>
+        <input type="text" class="form-control" id="nam" name="name" placeholder="Имя" th:value="${user.name}">
+    </div>
+    <div class="form-group">
+        <label for="sur">Фамилия: </label>
+        <input type="text" class="form-control"  id="sur" name="surname" placeholder="Фамилия" th:value="${user.surname}">
+    </div>
+    <div class="form-group">
+        <label for="kol"> Возраст: </label>
+        <input type="number" class="form-control"  id="kol" name="age" placeholder="Возраст" th:value="${user.age}">
+    </div>
+    <div class="form-group">
+        <label for="mon"> Счёт: </label>
+        <input type="number" class="form-control"  id="mon" name="money" placeholder="Денег на счету" th:value="${user.money}" >
+    </div>
+    <input type="submit" class="btn btn-primary right"  th:value="${user.id==null ? 'Сохранить' : 'Редактировать'}"/>
+</form>
+<br>
+<a th:href="@{'/allUsers/'+${bank.id}}" class="btn btn-primary right">Все пользователи</a>
+</body>
+</html>
