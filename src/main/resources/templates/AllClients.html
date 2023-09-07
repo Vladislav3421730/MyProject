@@ -12,8 +12,8 @@
 <body>
 <div class="container">
   <h2><p th:text="'Все клиенты банка '+${bank.title}"></p></h2>
-  <h3 th:if="${UserList.size()==0}">Клиентов не найдено</h3>
-  <form th:action="@{'/allUsers/'+${bank.id}}" th:unless="${UserList.size()==0}">
+  <h3 th:if="${UserList.isEmpty()}">Клиентов не найдено</h3>
+  <form th:action="@{'/allUsers/'+${bank.id}}" th:unless="${UserList.isEmpty()}">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Поиск" name="search">
       <div class="input-group-btn">
@@ -21,7 +21,7 @@
       </div>
     </div>
   </form>
-  <table th:unless="${UserList.size()==0}" class="table table-striped">
+  <table th:unless="${UserList.isEmpty()}" class="table table-striped">
     <thead>
     <tr>
       <th>Имя</th>
@@ -49,7 +49,7 @@
   </table>
   <a th:href="@{'/clients/create/' + ${bank.id}}" class="btn btn-primary">Добавить</a>
   <a href="/" class="btn btn-success">Все банки</a>
-  <form th:action="@{'/allUsers/'+${bank.id}}" method="get" th:unless="${UserList.size()==0}">
+  <form th:action="@{'/allUsers/'+${bank.id}}" method="get" th:unless="${UserList.isEmpty()}">
     <br>
     <select class="btn btn-default" name="sort" >
       <option selected>Сортировать по </option>
