@@ -12,10 +12,10 @@
 </head>
 <body>
 <div class="container">
-  <h2 th:if="${BankList.size()==0}">Банков нет</h2>
-  <h2 th:unless="${BankList.size()==0}">Таблица всех банков</h2>
+  <h2 th:if="${BankList.isEmpty()}">Банков нет</h2>
+  <h2 th:unless="${BankList.isEmpty()}">Таблица всех банков</h2>
   <p >По ссылкам можно работать с клиентами</p>
-  <form action="/" th:unless="${BankList.size()==0}">
+  <form action="/" th:unless="${BankList.isEmpty()}">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Поиск" name="search">
       <div class="input-group-btn">
@@ -23,7 +23,7 @@
       </div>
     </div>
   </form>
-  <table th:unless="${BankList.size()==0}" class="table table-striped">
+  <table th:unless="${BankList.isEmpty()}" class="table table-striped">
     <thead>
     <tr>
       <th>Название</th>
@@ -54,7 +54,7 @@
   <input type="button" class="btn btn-primary" value="Добавить"
          onclick="window.location.href='/bank/create'">
   <br><br>
-  <form action="/" method="get" th:unless="${BankList.size()==0}">
+  <form action="/" method="get" th:unless="${BankList.isEmpty()}">
   <select class="btn btn-default" name="sort" >
     <option selected>Сортировать по </option>
     <option value="title">Название</option>
