@@ -26,9 +26,9 @@ public class UserService {
     {
         if(Search!=null) {
             if(!isNumeric(Search))
-            return userRepository.
-                    findAllByNameOrSurnameAndBankId(Search,Search,id);
-            else return userRepository.findAllByAgeOrMoneyAndBankId(Integer.parseInt(Search),Integer.parseInt(Search),id);
+            return userRepository.findAllByBankIdAndNameOrSurname(id,Search,Search);
+            else return userRepository.findAllByBankIdAndAgeOrMoney(id,Integer.parseInt(Search),Integer.parseInt(Search));
+        }
         }
         List<User> list = userRepository.findAllByBankId(id);
         switch (sortBy){
