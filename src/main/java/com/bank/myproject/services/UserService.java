@@ -29,7 +29,6 @@ public class UserService {
             return userRepository.findAllByBankIdAndNameOrSurname(id,Search,Search);
             else return userRepository.findAllByBankIdAndAgeOrMoney(id,Integer.parseInt(Search),Integer.parseInt(Search));
         }
-        }
         List<User> list = userRepository.findAllByBankId(id);
         switch (sortBy){
             case "Name":list.sort(Comparator.comparing(User::getName));
