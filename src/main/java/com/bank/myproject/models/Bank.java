@@ -22,16 +22,15 @@ public class Bank {
     private Long id;
 
     @Size(min = 2)
-    @NotEmpty()
+    @NotEmpty(message = "Строка не должна быть пустой")
     @Column(name = "title")
     private String title;
 
     @Column(name = "Date")
-    @NotEmpty()
     private String Date;
 
     @Column(name="AmountOfClients")
-    @NotNull()
+    @Min(value = 2,message = "Минимум 200 клиентов")
     private int AmountOfClients;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "bank",fetch = FetchType.EAGER)

@@ -2,10 +2,10 @@ package com.bank.myproject.controllers;
 
 import com.bank.myproject.models.Bank;
 import com.bank.myproject.services.BankService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,15 +20,11 @@ public class BankController {
     public String firstpage(Model model, Bank bank)
     {
         model.addAttribute("bank",bank);
-        return "info";
+        return "BankCreating";
     }
     @PostMapping("/bank/save")
-    public String SaveBank( Bank bank, Model model, BindingResult bindingResult)
+    public String SaveBank(@Valid  Bank bank,  Model model)
     {
-        if(bindingResult.hasErrors())
-        {
-            return "info";
-        }
         bankService.SaveBank(bank);
         return "redirect:/";
     }
@@ -47,7 +43,7 @@ public class BankController {
     {
         Bank bank=bankService.GetById(id);
         model.addAttribute("bank",bank);
-        return "info";
+        return "BankCreating";
     }
 
     @PostMapping("/bank/delete/{id}")

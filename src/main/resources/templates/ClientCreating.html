@@ -12,7 +12,7 @@
 <body>
 <br>
 <h2><p th:text="'Клиенты банка:'+${bank.title}"/></h2>
-<form th:action="@{'/clients/create/'+${bank.id}}" class="form-container" method="post">
+<form th:action="@{'/clients/create/'+${bank.id}}"  class="form-container" method="post" >
     <input type="hidden" th:field="*{user.id}">
     <div class="form-group">
         <label for="nam">Имя: </label>

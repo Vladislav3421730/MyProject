@@ -16,7 +16,7 @@ public class UserService {
 
     public void SaveUser(Bank bank, User user) {
          user.setBank(bank);
-        userRepository.save(user);
+         userRepository.save(user);
     }
     public void deleteUser(Long id)
     {

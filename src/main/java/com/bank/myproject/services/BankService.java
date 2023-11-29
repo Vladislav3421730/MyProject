@@ -30,11 +30,14 @@ public class BankService {
         }
         List<Bank> bankList= bankRepository.findAll();
         switch (sortBy) {
-            case "title": bankList.sort((x,y)->x.getTitle().compareTo(y.getTitle()));
-            break;
-            case "NumOfClients":bankList.sort((x,y)->y.getAmountOfClients()-x.getAmountOfClients());
-            break;
-            case "date":bankList.sort((x,y)->x.getDate().compareTo(y.getDate()));
+            case "title":
+                bankList.sort((x, y) -> x.getTitle().compareTo(y.getTitle()));
+                break;
+            case "NumOfClients":
+                bankList.sort((x, y) -> y.getAmountOfClients() - x.getAmountOfClients());
+                break;
+            case "date":
+                bankList.sort((x, y) -> x.getDate().compareTo(y.getDate()));
             default:
         }
         return bankList;
