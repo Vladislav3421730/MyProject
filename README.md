@@ -1,4 +1,4 @@
 # MyProject
-Проект на Java (Spring boot,Hibernate,JPA), использована сзязь между таблицами OneToMany, для frontend использовал BootStrap. 
+Проект на Java (Spring boot,Hibernate,Data JPA,security), использована сзязь между таблицами OneToMany, для frontend использовал BootStrap. 
 Краткое описание: В данном веб-приложении можно добавлять банки, а также клиентов в любой банк, доступны функции добавления,
 редактирования, удаления, поиска и сортировки.
