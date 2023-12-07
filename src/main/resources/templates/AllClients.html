@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <title>Title</title>
   <meta charset="utf-8">
@@ -11,7 +12,7 @@
 </head>
 <body>
 <div class="container">
-  <h2><p th:text="'Все клиенты банка '+${bank.title}"></p></h2>
+  <h3 th:text="'Все клиенты банка '+${bank.title}"></h3>
   <h3 th:if="${UserList.isEmpty()}">Клиентов не найдено</h3>
   <form th:action="@{'/allUsers/'+${bank.id}}" th:unless="${UserList.isEmpty()}">
     <div class="input-group">
@@ -28,8 +29,10 @@
       <th>Фамилия</th>
       <th>Возраст</th>
       <th>Сумма на счёте</th>
+      <div sec:authorize="hasRole('ADMIN')">
       <th>Редактировать</th>
       <th>Удалить</th>
+      </div>
     </tr>
     </thead>
     <tbody>
@@ -38,16 +41,21 @@
       <th th:text="${client.surname}"></th>
       <th th:text="${client.age}"></th>
       <th th:text="${client.money}"></th>
+      <div sec:authorize="hasRole('ADMIN')">
       <th><a th:href="@{'/client/edit/'+${bank.id}+'/'+ ${client.id}}" class="btn btn-primary">Редактировать</a></th>
       <th>
         <form th:action="@{'/client/delete/'+${bank.id}+'/'+${client.id}}" method="post">
           <input type="submit" class="btn btn-danger" value="Удалить">
         </form>
       </th>
+      </div>
     </tr>
     </tbody>
   </table>
+  <div sec:authorize="hasRole('ADMIN')">
   <a th:href="@{'/clients/create/' + ${bank.id}}" class="btn btn-primary">Добавить</a>
+  </div>
+  <br>
   <a href="/" class="btn btn-success">Все банки</a>
   <form th:action="@{'/allUsers/'+${bank.id}}" method="get" th:unless="${UserList.isEmpty()}">
     <br>

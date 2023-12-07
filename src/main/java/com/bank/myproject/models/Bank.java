@@ -1,11 +1,14 @@
 package com.bank.myproject.models;
 
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,19 +24,18 @@ public class Bank {
     @Column(name="id")
     private Long id;
 
-    @Size(min = 2)
-    @NotEmpty(message = "Строка не должна быть пустой")
+    @Size(min = 2,message = "Строка должна быть больше 2 символов")
     @Column(name = "title")
     private String title;
 
     @Column(name = "Date")
     private String Date;
 
+    @Min( value = 200,message = "Минимум 200 клиентов")
     @Column(name="AmountOfClients")
-    @Min(value = 2,message = "Минимум 200 клиентов")
     private int AmountOfClients;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "bank",fetch = FetchType.EAGER)
-    private List<User> users=new ArrayList<>();
+    private List<Client> clients =new ArrayList<>();
 
 }

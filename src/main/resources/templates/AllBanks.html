@@ -1,68 +1,88 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <title>Title</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" th:href="@{/css/styles.css}" />
-
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 <body>
+<br>
 <div class="container">
-  <h2 th:if="${BankList.isEmpty()}">Банков нет</h2>
-  <h2 th:unless="${BankList.isEmpty()}">Таблица всех банков</h2>
-  <p >По ссылкам можно работать с клиентами</p>
-  <form action="/" th:unless="${BankList.isEmpty()}">
+<div sec:authorize="!isAuthenticated()">
+<input type="button" class="btn btn-success" value="Войти" onclick="window.location.href='/login'"/><br><br>
+</div>
+<div sec:authorize="isAuthenticated()">
+    <h3 th:text="${user.login}"></h3>
+    <input type="button" class="btn btn-danger" value="Выйти" onclick="window.location.href='/logout'"/><br><br>
+</div>
+<h2 th:if="${BankList.isEmpty()}">Банков нет</h2>
+<h3 th:unless="${BankList.isEmpty()}">Таблица всех банков</h3>
+<p >По ссылкам можно работать с клиентами</p>
+<form action="/" th:unless="${BankList.isEmpty()}">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Поиск" name="search">
-      <div class="input-group-btn">
-        <button class="btn btn-primary"  type="submit"><i class="glyphicon glyphicon-search"></i></button>
-      </div>
+        <input type="text" class="form-control" placeholder="Поиск" name="search">
+        <div class="input-group-btn">
+            <button class="btn btn-primary"  type="submit"><i class="glyphicon glyphicon-search"></i></button>
+        </div>
     </div>
-  </form>
-  <table th:unless="${BankList.isEmpty()}" class="table table-striped">
+</form>
+<table th:unless="${BankList.isEmpty()}" class="table table-striped">
     <thead>
     <tr>
-      <th>Название</th>
-      <th>Дата основания</th>
-      <th>Количесвто клиентов</th>
-      <th>Редактирование</th>
-      <th>Удаление</th>
-      <th>Работа с клиентами</th>
+        <th>Название</th>
+        <th>Дата основания</th>
+        <th>Количество клиентов</th>
+        <div sec:authorize="hasRole('ADMIN')">
+        <th>Редактирование</th>
+        <th>Удаление</th></div>
+        <div sec:authorize="hasAnyRole('ADMIN','MANAGER')">
+        <th>Работа с клиентами</th>
+        </div>
     </tr>
     </thead>
     <tbody>
     <tr th:each="bank : ${BankList}">
-      <th th:text="${bank.title}"></th>
-      <th th:text="${bank.date}"></th>
-      <th th:text="${bank.amountOfClients}"></th>
-      <th>
-        <a th:href="@{'/bank/edit/' + ${bank.id}}" class="btn btn-primary">Редактировать</a>
-      </th>
-      <th>
-        <form th:action="@{'/bank/delete/'+${bank.id}}" method="post">
-          <input type="submit" class="btn btn-danger" value="Удалить">
-        </form>
-      </th>
-      <th><a th:href="@{'/allUsers/'+${bank.id}}" class="btn btn-success">Клиенты</a></th>
+        <th th:text="${bank.title}"></th>
+        <th th:text="${bank.date}"></th>
+        <th th:text="${bank.amountOfClients}"></th>
+        <div sec:authorize="hasRole('ADMIN')">
+        <th>
+            <a th:href="@{'/bank/edit/' + ${bank.id}}" class="btn btn-primary">Редактировать</a>
+        </th>
+        <th>
+            <form th:action="@{'/bank/delete/'+${bank.id}}" method="post">
+                <input type="submit" class="btn btn-danger" value="Удалить">
+            </form>
+        </th>
+        </div>
+        <div sec:authorize="hasAnyRole('ADMIN','MANAGER')">
+        <th><a th:href="@{'/allUsers/'+${bank.id}}" class="btn btn-success">Клиенты</a></th>
+        </div>
     </tr>
     </tbody>
-  </table>
-  <input type="button" class="btn btn-primary" value="Добавить"
-         onclick="window.location.href='/bank/create'">
-  <br><br>
-  <form action="/" method="get" th:unless="${BankList.isEmpty()}">
-  <select class="btn btn-default" name="sort" >
-    <option selected>Сортировать по </option>
-    <option value="title">Название</option>
-    <option value="NumOfClients">Кол-во клиентов</option>
-    <option value="date">Дата основания</option>
-  </select>
+</table>
+<div sec:authorize="hasRole('ADMIN')">
+<input type="button" class="btn btn-primary" value="Добавить"
+       onclick="window.location.href='/bank/create'">
+<input type="button" class="btn btn-danger" value="Панель админа"
+    onclick="window.location.href='/admin'">
+</div>
+<br>
+<form action="/" method="get" th:unless="${BankList.isEmpty()}">
+    <select class="btn btn-default" name="sort" >
+        <option selected>Сортировать по </option>
+        <option value="title">Название</option>
+        <option value="NumOfClients">Кол-во клиентов</option>
+        <option value="date">Дата основания</option>
+    </select>
     <input type="submit" value="Ок"  class="btn btn-success">
-  </form>
-  </div>
+</form>
+</div>
 </body>
 </html>
+

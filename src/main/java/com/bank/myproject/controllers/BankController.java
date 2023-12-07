@@ -2,12 +2,16 @@ package com.bank.myproject.controllers;
 
 import com.bank.myproject.models.Bank;
 import com.bank.myproject.services.BankService;
-import jakarta.validation.Valid;
+
+import com.bank.myproject.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -15,6 +19,7 @@ import java.util.List;
 public class BankController {
 
     private final BankService bankService;
+    private final UserService userService;
 
     @GetMapping("/bank/create")
     public String firstpage(Model model, Bank bank)
@@ -23,16 +28,22 @@ public class BankController {
         return "BankCreating";
     }
     @PostMapping("/bank/save")
-    public String SaveBank(@Valid  Bank bank,  Model model)
+    public String SaveBank(@Valid Bank bank, BindingResult bindingResult, Model model)
     {
+        if(bindingResult.hasErrors())
+        {
+            return "BankCreating";
+        }
+
         bankService.SaveBank(bank);
         return "redirect:/";
     }
     @GetMapping("/")
     public String AllBank(Model model,@RequestParam(name="sort",defaultValue = "none") String nameBy,
-                          @RequestParam(name="search",required = false) String search)
+                          @RequestParam(name="search",required = false) String search,Principal principal)
     {
       List<Bank> bankList=bankService.ListBank(nameBy,search);
+      model.addAttribute("user",userService.getUserByPrincipal(principal));
       model.addAttribute("BankList",bankList);
       model.addAttribute("search",search);
       return "AllBanks";

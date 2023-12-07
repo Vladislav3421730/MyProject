@@ -11,26 +11,31 @@
 </head>
 <body>
 <br>
-<h2><p th:text="'Клиенты банка:'+${bank.title}"/></h2>
+<h2 ><p th:text="'Клиенты банка:'+${bank.title}"/></h2>
 <form th:action="@{'/clients/create/'+${bank.id}}"  class="form-container" method="post" >
-    <input type="hidden" th:field="*{user.id}">
+
+    <input type="hidden" th:field="*{client.id}">
+    <p th:errors="${client.name}"></p>
     <div class="form-group">
         <label for="nam">Имя: </label>
-        <input type="text" class="form-control" id="nam" name="name" placeholder="Имя" th:value="${user.name}">
+        <input type="text" class="form-control" id="nam" name="name" placeholder="Имя" th:value="${client.name}">
     </div>
+    <p th:errors="${client.surname}"></p>
     <div class="form-group">
         <label for="sur">Фамилия: </label>
-        <input type="text" class="form-control"  id="sur" name="surname" placeholder="Фамилия" th:value="${user.surname}">
+        <input type="text" class="form-control"  id="sur" name="surname" placeholder="Фамилия" th:value="${client.surname}">
     </div>
+    <p th:errors="${client.age}"></p>
     <div class="form-group">
         <label for="kol"> Возраст: </label>
-        <input type="number" class="form-control"  id="kol" name="age" placeholder="Возраст" th:value="${user.age}">
+        <input type="number" class="form-control"  id="kol" name="age" placeholder="Возраст" th:value="${client.age}">
     </div>
+    <p th:errors="${client.money}"></p>
     <div class="form-group">
         <label for="mon"> Счёт: </label>
-        <input type="number" class="form-control"  id="mon" name="money" placeholder="Денег на счету" th:value="${user.money}" >
+        <input type="number" class="form-control"  id="mon" name="money" placeholder="Денег на счету" th:value="${client.money}" >
     </div>
-    <input type="submit" class="btn btn-primary right"  th:value="${user.id==null ? 'Сохранить' : 'Редактировать'}"/>
+    <input type="submit" class="btn btn-primary right"  th:value="${client.id==null ? 'Сохранить' : 'Редактировать'}"/>
 </form>
 <br>
 <a th:href="@{'/allUsers/'+${bank.id}}" class="btn btn-primary right">Все пользователи</a>

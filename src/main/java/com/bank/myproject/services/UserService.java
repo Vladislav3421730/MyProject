@@ -1,66 +1,74 @@
 package com.bank.myproject.services;
 
-import com.bank.myproject.models.Bank;
 import com.bank.myproject.models.User;
+import com.bank.myproject.models.role;
 import com.bank.myproject.repositories.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
+import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
+
 @Service
-@AllArgsConstructor
-public class UserService {
+@RequiredArgsConstructor
+public class UserService  {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public void SaveUser(Bank bank, User user) {
-         user.setBank(bank);
-         userRepository.save(user);
-    }
-    public void deleteUser(Long id)
+    public boolean SaveUser(User user)
     {
-        userRepository.deleteById(id);
+        User user1=userRepository.findByLogin(user.getLogin());
+        if(user1!=null) return false;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Collections.singleton(role.ROLE_MANAGER));
+        userRepository.save(user);
+        return true;
     }
-    public List<User> FindByBankId(Long id,String Search,String sortBy)
+
+
+    public User GetById(Long id)
     {
-        if(Search!=null) {
-            if(!isNumeric(Search))
-            return userRepository.findAllByBankIdAndNameOrSurname(id,Search,Search);
-            else return userRepository.findAllByBankIdAndAgeOrMoney(id,Integer.parseInt(Search),Integer.parseInt(Search));
+        return userRepository.getById(id);
+    }
+    public List<User> AllUsers()
+    {
+        List<User> UserList=userRepository.findAll();
+        return UserList;
+    }
+
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null) return new User();
+        return userRepository.findByLogin(principal.getName());
+    }
+
+    public void banUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            if (user.isBun() && !user.getRoles().contains(role.ROLE_ADMIN)) {
+                user.setBun(false);
+            } else {
+                user.setBun(true);
+            }
         }
-        List<User> list = userRepository.findAllByBankId(id);
-        switch (sortBy){
-            case "Name":list.sort(Comparator.comparing(User::getName));
-            break;
-            case "Surname":list.sort(Comparator.comparing(User::getSurname));
-            break;
-            case "money":list.sort(Comparator.comparingInt(User::getMoney).reversed());
-            break;
-            case "age":list.sort(Comparator.comparingInt(User::getAge));
-            break;
-            default:
+        userRepository.save(user);
+
+    }
+    public void MakeAdmin(Long id)
+    {
+        User user=userRepository.findById(id).orElse(null);
+        if(user!=null)
+        {
+            if(user.getRoles().contains(role.ROLE_ADMIN)) {
+                user.getRoles().remove(role.ROLE_ADMIN);
+            }
+            else {
+                user.getRoles().add(role.ROLE_ADMIN);
+            }
         }
-        return list;
-     }
-    public User FindById(Long id)
-    {
-        return userRepository.findById(id).orElse(null);
-    }
-    public List<User> GetUsers()
-    {
-        return userRepository.findAll();
-    }
-    public void EditUser(User user)
-    {
         userRepository.save(user);
     }
-    private boolean isNumeric(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+
 }

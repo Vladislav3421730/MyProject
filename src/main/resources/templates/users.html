@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Title</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="container">
+<br>
+<h3 th:text="${userPrincipal.login}"></h3><br>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>Login</th>
+    <th>Email</th>
+    <th>roles</th>
+    <th>Bun</th>
+    <th>Admin</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user : ${UserList}" >
+    <div th:if="${user.id!=userPrincipal.id}">
+    <th th:text="${user.id}"></th>
+    <th th:text="${user.login}"></th>
+    <th th:text="${user.email}"></th>
+      <th th:if="${!user.getRoles().isEmpty()}">
+         <span th:each="role, iterStat : ${user.getRoles()}">
+           <span th:text="${role.equals(role.ROLE_ADMIN) ? 'Admin' : 'Manager'}"></span>
+        <br th:unless="${iterStat.last}" />
+        </span>
+      </th>
+      <th th:if="${user.getRoles().isEmpty()}">
+          None
+      </th>
+    <th>
+      <form th:action="@{'user/bun/'+${user.id}}" method="post">
+      <input type="submit" class="btn btn-danger" th:value="${user.bun ? 'Разбанить' : 'Забанить'}">
+      </form>
+    </th>
+    <th>
+      <form th:action="@{'user/admin/'+${user.id}}" method="post">
+        <input type="submit" class="btn btn-primary"
+               th:value="${user.isAdmin() ? 'Лишить роли ADMIN' : 'Сделать админом'}">
+      </form>
+    </th>
+    </div>
+  </tr>
+  </tbody>
+</table>
+  <a href="/" class="btn btn-success">Все банки</a>
+</div>
+</body>
+</html>

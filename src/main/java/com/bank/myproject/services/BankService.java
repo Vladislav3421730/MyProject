@@ -1,22 +1,21 @@
 package com.bank.myproject.services;
 
 import com.bank.myproject.models.Bank;
-import com.bank.myproject.models.User;
 import com.bank.myproject.repositories.BankRepository;
-import com.bank.myproject.repositories.UserRepository;
+import com.bank.myproject.repositories.ClientRepository;
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class BankService {
+public class BankService  {
 
     private final BankRepository bankRepository;
 
-    private final UserRepository userRepository;
+    private final ClientRepository clientRepository;
 
     public void SaveBank(Bank bank)
     {
