@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 <body>
 <br>
@@ -22,7 +21,9 @@
 </div>
 <h2 th:if="${BankList.isEmpty()}">Банков нет</h2>
 <h3 th:unless="${BankList.isEmpty()}">Таблица всех банков</h3>
-<p >По ссылкам можно работать с клиентами</p>
+<div sec:authorize="hasAnyRole('MANAGER','ADMIN')">
+<p th:unless="${BankList.isEmpty()}" >По ссылкам можно работать с клиентами</p>
+</div>
 <form action="/" th:unless="${BankList.isEmpty()}">
     <div class="input-group">
         <input type="text" class="form-control" placeholder="Поиск" name="search">
